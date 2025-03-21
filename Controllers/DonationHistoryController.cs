@@ -35,11 +35,18 @@ namespace StudentBloodBank.Controllers
         }
 
 
-        [HttpGet("GetDonationsByDonor ${id}")]
-        public IActionResult GetDonationByID(int ID)
+
+        [HttpGet("{id}")]
+        public IActionResult GetDonationByID(int id)
         {
             List<DonationHistroy> dhi = new List<DonationHistroy>();
-            SqlDataReader reader = AdoDataLayer.GetReaderDataFromQuery("GetDonationsByDonor");
+
+            SqlParameter[] parameters = new SqlParameter[]
+                         {
+                              new SqlParameter("@DonorId", id)
+                         };
+            SqlDataReader reader = AdoDataLayer.GetReaderDataFromQuery("GetDonationsByDonor", parameters);
+
             while (reader.Read())
             {
                 dhi.Add(new DonationHistroy
@@ -61,29 +68,36 @@ namespace StudentBloodBank.Controllers
 
 
         [HttpPost("SaveDonationHistory")]
-
-        public IActionResult AddcollegeDetails(int id,[FromBody] DonationHistroy dhi)
+        public IActionResult AddcollegeDetails(int id, [FromBody] DonationHistroy dhi)
         {
             try
             {
-                String StoredProcedure = "AddDonation";
-                SqlParameter[] parameter = new SqlParameter[]
+                // Validate Status in C#
+                var allowedStatuses = new List<string> { "Pending", "Completed", "Cancelled" };
+                if (!allowedStatuses.Contains(dhi.Status))
                 {
-                     new SqlParameter("@@DonorId", id),
-                     new SqlParameter("@BloodGroup", dhi.BloodGroup),
-                     new SqlParameter("@DonationDate", dhi.DonationDate),
-                     new SqlParameter("@Status", dhi.Status)
+                    return BadRequest("Invalid status value. Allowed values are: Pending, Completed, Cancelled.");
+                }
 
+                // Call stored procedure
+                string StoredProcedure = "AddDonation";
+                SqlParameter[] parameters = new SqlParameter[]
+                {
+            new SqlParameter("@DonorId", id),
+            new SqlParameter("@BloodGroup", dhi.BloodGroup),
+            new SqlParameter("@DonationDate", dhi.DonationDate),
+            new SqlParameter("@Status", dhi.Status)
                 };
-                AdoDataLayer.GetReaderDataFromQuery(StoredProcedure, parameter);
+
+                AdoDataLayer.GetReaderDataFromQuery(StoredProcedure, parameters);
                 return Ok("Saved");
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
-
         }
+
 
 
 
