@@ -12,7 +12,7 @@ namespace StudentBloodBank
                 options.AddPolicy("AllowSpecificOrigins",
                     policy =>
                     {
-                        policy.WithOrigins("*") // Replace with your frontend URL
+                        policy.WithOrigins("*") 
                               .AllowAnyMethod()
                               .AllowAnyHeader();
                     });

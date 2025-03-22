@@ -15,7 +15,7 @@ namespace StudentBloodBank.Controllers
     [ApiController]
     public class UserMasterController : ControllerBase
     {
-
+        #region Get ALl user details
         [HttpGet("GetUserDetails")]
         public IActionResult GetUserDetails()
         {
@@ -54,7 +54,7 @@ namespace StudentBloodBank.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
+        #endregion
 
 
         [HttpPost("PostDetails")]
@@ -65,6 +65,9 @@ namespace StudentBloodBank.Controllers
                 if (user == null)
                     return BadRequest("User data is null.");
 
+                if (string.IsNullOrEmpty(user.UserName) || string.IsNullOrEmpty(user.Email))
+                    return BadRequest("Username and Email are required.");
+
                 string storedProcedureName = "RegisterUser";
                 SqlParameter[] parameters = new SqlParameter[]
                 {
@@ -73,9 +76,9 @@ namespace StudentBloodBank.Controllers
                     new SqlParameter("@Password", user.Password),
                     new SqlParameter("@BloodGroup", user.BloodGroup),
                     new SqlParameter("@Contact", user.Contact),
-                    new SqlParameter("@Role", user.Role), 
+                    new SqlParameter("@Role", user.Role),
                     new SqlParameter("@AddressID", user.AddressId),
-                    new SqlParameter("@CollegeID", user.Collegeid)
+                    new SqlParameter("@CollegeID", user.Collegeid ?? (object)DBNull.Value)
                 };
 
                 AdoDataLayer.GetReaderDataFromQuery(storedProcedureName, parameters);
@@ -86,6 +89,7 @@ namespace StudentBloodBank.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
 
 
 
