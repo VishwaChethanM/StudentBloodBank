@@ -7,6 +7,7 @@ using StudentBloodBank.DTOLayer;
 using System.Collections.Generic;
 using System.Runtime.Intrinsics.X86;
 using System.Reflection.PortableExecutable;
+using System.Formats.Tar;
 
 namespace StudentBloodBank.Controllers
 {
@@ -57,7 +58,7 @@ namespace StudentBloodBank.Controllers
 
 
         [HttpPost("PostDetails")]
-        public IActionResult PostDetails([FromBody] UserMaster user)
+        public IActionResult PostDetails([FromBody] PostUserMasterDto user)
         {
             try
             {
@@ -88,6 +89,8 @@ namespace StudentBloodBank.Controllers
 
 
 
+
+
         [HttpGet("UserLoginByEmail")]
         public IActionResult GetFromEmailAndPassword(string Email, string Password)
         {
@@ -109,19 +112,20 @@ namespace StudentBloodBank.Controllers
                         UserRole.UserRoles use = (UserRole.UserRoles)reader.GetInt32(6);
                         users.Add(new UserMaster
                         {
-                            UserId = reader.GetInt32(0),  
-                            UserName = reader.GetString(1), 
-                            Email =  reader.GetString(2), 
-                            Password =  reader.GetString(3),
-                            BloodGroup =  reader.GetString(4),  
-                            Contact = reader.GetString(5), 
-                            Role = use.ToString(),
+                            UserId = reader.GetInt32(0),
+                            UserName = reader.GetString(1),
+                            Email = reader.GetString(2),
+                            BloodGroup = reader.GetString(4),
+                            Contact = reader.GetString(5),
+                            Role = ((UserRole.UserRoles)reader.GetInt32(6)).ToString(),
+                            AddressId = reader.GetInt32(7),
+                            Collegeid = reader.GetInt32(8),
                             CreatedDateTime = reader.GetDateTime(9),
                             Locality = reader.GetString(10),
-                            Area=reader.GetString(11),
-                            Collegeid=reader.GetInt32(8),
-                            AddressId=reader.GetInt32(7)
+                            Area = reader.GetString(11),
+                            CollegeName= reader.GetString(12)
                         });
+
                     }
                 }
 
@@ -132,6 +136,8 @@ namespace StudentBloodBank.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+
 
 
         [HttpGet("GetUserById/{id}")]
