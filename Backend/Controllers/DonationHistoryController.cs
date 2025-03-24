@@ -10,6 +10,7 @@ namespace StudentBloodBank.Controllers
     [ApiController]
     public class DonationHistoryController : ControllerBase
     {
+        #region Get All Donation
         [HttpGet("GetAllDonation")]
         public IActionResult GetAllDonationi()
         {
@@ -33,9 +34,9 @@ namespace StudentBloodBank.Controllers
             reader.Close();
             return Ok(dh);
         }
+        #endregion
 
-
-
+        #region Get By Id
         [HttpGet("{id}")]
         public IActionResult GetDonationByID(int id)
         {
@@ -63,8 +64,9 @@ namespace StudentBloodBank.Controllers
             return Ok(Donation);
 
         }
+        #endregion
 
-
+        #region Save Donation History
         [HttpPost("SaveDonationHistory")]
         public IActionResult AddcollegeDetails(int id, [FromBody] DonationHistroy dhi)
         {
@@ -93,9 +95,7 @@ namespace StudentBloodBank.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
-
-
+        #endregion
 
 
     }

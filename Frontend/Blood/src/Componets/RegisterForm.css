@@ -1,0 +1,62 @@
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #ffe74d;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* Full screen height */
+}
+
+.register-form-container {
+  background-color: #79c7ff;
+  padding: 2rem;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(255, 0, 0, 0.3);
+  width: 100%;
+  max-width: 420px;
+}
+
+.register-form-container h2 {
+  text-align: center;
+  color: #f80000;
+  margin-bottom: 1.5rem;
+  font-size: 1.8rem;
+}
+
+.register-input, .register-dropdown select {
+  width: 100%;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  background-color: #222;
+  color: #fff;
+}
+
+.register-input::placeholder {
+  color: #bbb;
+}
+
+.register-dropdown select {
+  appearance: none;
+  background-color: #222;
+  color: #fff;
+}
+
+.register-button {
+  width: 100%;
+  padding: 0.75rem;
+  background-color: #e63946;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.register-button:hover {
+  background-color: #28d0d6;
+}

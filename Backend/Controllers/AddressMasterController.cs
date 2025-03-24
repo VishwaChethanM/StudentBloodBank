@@ -10,6 +10,7 @@ namespace StudentBloodBank.Controllers
     [ApiController]
     public class AddressMasterController : ControllerBase
     {
+        #region Get All Address Details
         [HttpGet("GetAddressDetails")]
         public ActionResult<List<AddressMasterl>> Get()
         {
@@ -29,7 +30,9 @@ namespace StudentBloodBank.Controllers
             }
             return Ok(addresses);
         }
+        #endregion
 
+        #region Save Address Details
 
         [HttpPost("PostDetails")]
         public IActionResult PostDetails([FromBody] AddressMasterl address)
@@ -69,10 +72,9 @@ namespace StudentBloodBank.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        #endregion
 
-
-
-
+        #region Upadte Details
         [HttpPut("PutDetails/{id}")]
         public IActionResult PutDetails(int id, [FromBody] AddressMasterl address)
         {
@@ -103,11 +105,9 @@ namespace StudentBloodBank.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        #endregion
 
-
-
-
-
+        #region Delete Details
         [HttpDelete("DeleteDetails/{id}")]
         public IActionResult DeleteDetails(int id)
         {
@@ -136,6 +136,7 @@ namespace StudentBloodBank.Controllers
             {
                 return BadRequest(ex.Message);
             }
-        } 
+        }
+        #endregion
     }
 }

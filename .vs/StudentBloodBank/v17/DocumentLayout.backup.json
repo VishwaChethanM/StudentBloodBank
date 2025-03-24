@@ -1,0 +1,141 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\honne\\source\\repos\\StudentBloodBankProject\\StudentBloodBank\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{BFA7E1A8-27E8-4900-AC8B-60CAFEFF94CB}|StudentBloodBank.csproj|c:\\users\\honne\\source\\repos\\studentbloodbankproject\\studentbloodbank\\controllers\\donationhistorycontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BFA7E1A8-27E8-4900-AC8B-60CAFEFF94CB}|StudentBloodBank.csproj|solutionrelative:controllers\\donationhistorycontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BFA7E1A8-27E8-4900-AC8B-60CAFEFF94CB}|StudentBloodBank.csproj|c:\\users\\honne\\source\\repos\\studentbloodbankproject\\studentbloodbank\\controllers\\donormastercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BFA7E1A8-27E8-4900-AC8B-60CAFEFF94CB}|StudentBloodBank.csproj|solutionrelative:controllers\\donormastercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BFA7E1A8-27E8-4900-AC8B-60CAFEFF94CB}|StudentBloodBank.csproj|c:\\users\\honne\\source\\repos\\studentbloodbankproject\\studentbloodbank\\controllers\\collegemastercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BFA7E1A8-27E8-4900-AC8B-60CAFEFF94CB}|StudentBloodBank.csproj|solutionrelative:controllers\\collegemastercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BFA7E1A8-27E8-4900-AC8B-60CAFEFF94CB}|StudentBloodBank.csproj|c:\\users\\honne\\source\\repos\\studentbloodbankproject\\studentbloodbank\\controllers\\addressmastercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BFA7E1A8-27E8-4900-AC8B-60CAFEFF94CB}|StudentBloodBank.csproj|solutionrelative:controllers\\addressmastercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BFA7E1A8-27E8-4900-AC8B-60CAFEFF94CB}|StudentBloodBank.csproj|c:\\users\\honne\\source\\repos\\studentbloodbankproject\\studentbloodbank\\controllers\\usermastercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BFA7E1A8-27E8-4900-AC8B-60CAFEFF94CB}|StudentBloodBank.csproj|solutionrelative:controllers\\usermastercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BFA7E1A8-27E8-4900-AC8B-60CAFEFF94CB}|StudentBloodBank.csproj|c:\\users\\honne\\source\\repos\\studentbloodbankproject\\studentbloodbank\\enums\\userrole.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BFA7E1A8-27E8-4900-AC8B-60CAFEFF94CB}|StudentBloodBank.csproj|solutionrelative:enums\\userrole.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BFA7E1A8-27E8-4900-AC8B-60CAFEFF94CB}|StudentBloodBank.csproj|c:\\users\\honne\\source\\repos\\studentbloodbankproject\\studentbloodbank\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BFA7E1A8-27E8-4900-AC8B-60CAFEFF94CB}|StudentBloodBank.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 2,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{eefa5220-e298-11d0-8f78-00a0c9110057}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "DonationHistoryController.cs",
+              "DocumentMoniker": "C:\\Users\\honne\\source\\repos\\StudentBloodBankProject\\StudentBloodBank\\Controllers\\DonationHistoryController.cs",
+              "RelativeDocumentMoniker": "Controllers\\DonationHistoryController.cs",
+              "ToolTip": "C:\\Users\\honne\\source\\repos\\StudentBloodBankProject\\StudentBloodBank\\Controllers\\DonationHistoryController.cs",
+              "RelativeToolTip": "Controllers\\DonationHistoryController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAEMAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-22T16:40:29.542Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "DonorMasterController.cs",
+              "DocumentMoniker": "C:\\Users\\honne\\source\\repos\\StudentBloodBankProject\\StudentBloodBank\\Controllers\\DonorMasterController.cs",
+              "RelativeDocumentMoniker": "Controllers\\DonorMasterController.cs",
+              "ToolTip": "C:\\Users\\honne\\source\\repos\\StudentBloodBankProject\\StudentBloodBank\\Controllers\\DonorMasterController.cs",
+              "RelativeToolTip": "Controllers\\DonorMasterController.cs",
+              "ViewState": "AgIAAAwAAAAAAAAAAAAAALUAAAASAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-22T16:37:28.35Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "CollegeMasterController.cs",
+              "DocumentMoniker": "C:\\Users\\honne\\source\\repos\\StudentBloodBankProject\\StudentBloodBank\\Controllers\\CollegeMasterController.cs",
+              "RelativeDocumentMoniker": "Controllers\\CollegeMasterController.cs",
+              "ToolTip": "C:\\Users\\honne\\source\\repos\\StudentBloodBankProject\\StudentBloodBank\\Controllers\\CollegeMasterController.cs",
+              "RelativeToolTip": "Controllers\\CollegeMasterController.cs",
+              "ViewState": "AgIAAAwAAAAAAAAAAAAAACwAAAAIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-22T15:01:58.098Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "AddressMasterController.cs",
+              "DocumentMoniker": "C:\\Users\\honne\\source\\repos\\StudentBloodBankProject\\StudentBloodBank\\Controllers\\AddressMasterController.cs",
+              "RelativeDocumentMoniker": "Controllers\\AddressMasterController.cs",
+              "ToolTip": "C:\\Users\\honne\\source\\repos\\StudentBloodBankProject\\StudentBloodBank\\Controllers\\AddressMasterController.cs",
+              "RelativeToolTip": "Controllers\\AddressMasterController.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAAGwAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-22T14:32:14.894Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "UserRole.cs",
+              "DocumentMoniker": "C:\\Users\\honne\\source\\repos\\StudentBloodBankProject\\StudentBloodBank\\Enums\\UserRole.cs",
+              "RelativeDocumentMoniker": "Enums\\UserRole.cs",
+              "ToolTip": "C:\\Users\\honne\\source\\repos\\StudentBloodBankProject\\StudentBloodBank\\Enums\\UserRole.cs",
+              "RelativeToolTip": "Enums\\UserRole.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-22T14:11:27.672Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\honne\\source\\repos\\StudentBloodBankProject\\StudentBloodBank\\Program.cs",
+              "RelativeDocumentMoniker": "Program.cs",
+              "ToolTip": "C:\\Users\\honne\\source\\repos\\StudentBloodBankProject\\StudentBloodBank\\Program.cs",
+              "RelativeToolTip": "Program.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAAA4AAAAwAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-22T12:09:21.394Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "UserMasterController.cs",
+              "DocumentMoniker": "C:\\Users\\honne\\source\\repos\\StudentBloodBankProject\\StudentBloodBank\\Controllers\\UserMasterController.cs",
+              "RelativeDocumentMoniker": "Controllers\\UserMasterController.cs",
+              "ToolTip": "C:\\Users\\honne\\source\\repos\\StudentBloodBankProject\\StudentBloodBank\\Controllers\\UserMasterController.cs",
+              "RelativeToolTip": "Controllers\\UserMasterController.cs",
+              "ViewState": "AgIAAAwAAAAAAAAAAAAAAFwAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-16T06:18:17.687Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

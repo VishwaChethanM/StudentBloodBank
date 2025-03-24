@@ -14,8 +14,8 @@ namespace StudentBloodBank.Controllers
     [ApiController]
     public class DonorMasterController : ControllerBase
     {
-
-        [HttpPost("SaveCollege")]
+        #region Save Donar Details
+        [HttpPost("SaveDoner")]
         public IActionResult AddcollegeDetails([FromBody] DonorMaster donr)
         {
             try
@@ -37,9 +37,9 @@ namespace StudentBloodBank.Controllers
             }
 
         }
+        #endregion
 
-
-
+        #region Get All Donors
         [HttpGet("GetAllDonors")]
         public IActionResult GetAllDonors()
         {
@@ -61,17 +61,10 @@ namespace StudentBloodBank.Controllers
             reader.Close(); 
             return Ok(donors); 
         }
+        #endregion
 
 
-
-
-
-
-
-
-
-
-
+        #region Get Donor By Id
         [HttpGet("GetDonorById/{id}")]
         public IActionResult GetUserById(int id)
         {
@@ -113,9 +106,9 @@ namespace StudentBloodBank.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        #endregion
 
-
-
+        #region Search Donors By BloodGroup
         [HttpGet("SearchDonorsByBloodGroup/{bloodGroup}")]
         public IActionResult SearchDonorsByBloodGroup(string bloodGroup)
         {
@@ -159,9 +152,9 @@ namespace StudentBloodBank.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        #endregion
 
-
-
+        #region Update Donor
         [HttpPut("UpdateAvailability/{donorId}")]
         public IActionResult UpdateAvailability(int donorId, [FromBody] bool availabilityStatus)
         {
@@ -186,7 +179,7 @@ namespace StudentBloodBank.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
+        #endregion
 
 
 

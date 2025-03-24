@@ -56,7 +56,7 @@ namespace StudentBloodBank.Controllers
         }
         #endregion
 
-
+        #region Save User Details
         [HttpPost("PostDetails")]
         public IActionResult PostDetails([FromBody] PostUserMasterDto user)
         {
@@ -89,12 +89,9 @@ namespace StudentBloodBank.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        #endregion
 
-
-
-
-
-
+        #region USer Login by Email and Password
         [HttpGet("UserLoginByEmail")]
         public IActionResult GetFromEmailAndPassword(string Email, string Password)
         {
@@ -140,9 +137,9 @@ namespace StudentBloodBank.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        #endregion
 
-
-
+        #region Get User By Id
 
         [HttpGet("GetUserById/{id}")]
         public IActionResult GetUserById(int id)
@@ -194,5 +191,6 @@ namespace StudentBloodBank.Controllers
             }
 
         }
+        #endregion
     }
 }

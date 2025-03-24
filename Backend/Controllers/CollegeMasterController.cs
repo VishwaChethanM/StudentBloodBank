@@ -12,6 +12,8 @@ namespace StudentBloodBank.Controllers
     [ApiController]
     public class CollegeMasterController : ControllerBase
     {
+        #region Get All College Details
+
         [HttpGet("GetCollegeDetails")]
         public IActionResult getCollegeDetails()
         {
@@ -37,10 +39,10 @@ namespace StudentBloodBank.Controllers
             return Ok(college);
 
         }
+        #endregion
 
 
-
-
+        #region Save College Details
         [HttpPost("SaveCollege")]
         public IActionResult AddcollegeDetails([FromBody] CollegeMaster clg)
         {
@@ -62,9 +64,9 @@ namespace StudentBloodBank.Controllers
 
         }
 
+        #endregion
 
-
-
+        #region Update College Details
         [HttpPut("UpdateDetails")]
         public IActionResult UpdateDetails(int id,CollegeMaster clg)
         {
@@ -94,10 +96,10 @@ namespace StudentBloodBank.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        #endregion
 
 
-
-
+        #region Delete College Details
         [HttpDelete("DeleteClgDetails/{id}")]
         public IActionResult Delete(int id)
         {
@@ -119,7 +121,7 @@ namespace StudentBloodBank.Controllers
             return Ok("Deleted");
         }
 
-
+        #endregion
 
     }
 }
