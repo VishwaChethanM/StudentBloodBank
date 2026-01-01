@@ -1,0 +1,65 @@
+/* Profile Container */
+.profile-container {
+    text-align: center;
+    padding: 50px 20px;
+    background: linear-gradient(to right, #ff512f, #dd2476);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  /* Heading */
+  .profile-heading {
+    color: #fff;
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+  }
+  
+  /* Profile Card */
+  .profile-card {
+    background: rgba(255, 255, 255, 0.3);
+    padding: 20px;
+    border-radius: 15px;
+    text-align: center;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+    max-width: 400px;
+    width: 100%;
+  }
+  
+  /* Input Fields */
+  .profile-input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    border: none;
+    font-size: 1rem;
+    background: rgba(255, 255, 255, 0.6);
+  }
+  
+  /* Button */
+  .profile-button {
+    padding: 12px 18px;
+    border-radius: 8px;
+    border: none;
+    background: #ff512f;
+    color: #fff;
+    font-size: 1rem;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background 0.3s;
+  }
+  
+  .profile-button:hover {
+    background: #e03e25;
+  }
+  
+  /* Responsive */
+  @media (max-width: 600px) {
+    .profile-card {
+      width: 90%;
+    }
+  }
+  

@@ -23,11 +23,10 @@ public class UserMaster
     public string BloodGroup { get; set; } = string.Empty;
 
     [Required]
-    [MaxLength(13)]
-    [MinLength(13)]
+   
     public string Contact { get; set; } = string.Empty;
 
-    public string Role { get; set; } 
+    public int Role { get; set; } 
 
     public int? Collegeid { get; set; }
     public DateTime CreatedDateTime { get; set; }

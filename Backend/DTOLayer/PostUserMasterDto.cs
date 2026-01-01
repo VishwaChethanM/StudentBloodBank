@@ -27,7 +27,7 @@ namespace StudentBloodBank.DTOLayer
         [MinLength(13)]
         public string Contact { get; set; } = string.Empty;
 
-        public string Role { get; set; }
+        public int Role { get; set; }
 
         public int? Collegeid { get; set; }
         public int AddressId { get; set; }

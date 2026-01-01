@@ -1,0 +1,124 @@
+/* General styles */
+.request-blood-container {
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 20px;
+  background: #ffffff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  font-family: Arial, sans-serif;
+}
+
+.request-blood-container h1,
+.request-blood-container h2 {
+  text-align: center;
+  color: #333;
+}
+
+/* Form styling */
+.request-form {
+  border: 1px solid #ddd;
+  padding: 15px;
+  border-radius: 6px;
+  background: #f9f9f9;
+  margin-bottom: 20px;
+}
+
+.request-form select,
+.request-form input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.request-form button {
+  background: #d9534f;
+  color: #fff;
+  border: none;
+  padding: 12px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 4px;
+  width: 100%;
+  transition: background 0.3s;
+}
+
+.request-form button:hover {
+  background: #c9302c;
+}
+
+/* Success & error message styling */
+.message {
+  padding: 10px;
+  margin-bottom: 15px;
+  text-align: center;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.message.success {
+  background: #dff0d8;
+  color: #3c763d;
+  border: 1px solid #d6e9c6;
+}
+
+.message.error {
+  background: #f2dede;
+  color: #a94442;
+  border: 1px solid #ebccd1;
+}
+
+/* Table styling */
+.blood-request-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.blood-request-table th,
+.blood-request-table td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: left;
+}
+
+.blood-request-table th {
+  background: #d9534f;
+  color: #fff;
+}
+
+.blood-request-table tr:nth-child(even) {
+  background: #f9f9f9;
+}
+
+.blood-request-table tr:hover {
+  background: #f1f1f1;
+}
+
+/* Center no data message */
+.no-requests {
+  text-align: center;
+  font-weight: bold;
+  padding: 15px;
+}
+
+/* Responsive design */
+@media (max-width: 600px) {
+  .request-blood-container {
+    width: 95%;
+    padding: 15px;
+  }
+
+  .request-form button {
+    font-size: 14px;
+  }
+
+  .blood-request-table th,
+  .blood-request-table td {
+    padding: 8px;
+    font-size: 12px;
+  }
+}

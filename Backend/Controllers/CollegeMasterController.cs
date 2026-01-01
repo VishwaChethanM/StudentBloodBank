@@ -1,10 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using StudentBloodBank.ADOLayer;
 using StudentBloodBank.Model;
-using System.Reflection.Metadata;
-using System.Security.Cryptography;
+using System;
+using System.Collections.Generic;
 
 namespace StudentBloodBank.Controllers
 {
@@ -12,116 +11,124 @@ namespace StudentBloodBank.Controllers
     [ApiController]
     public class CollegeMasterController : ControllerBase
     {
-        #region Get All College Details
+        private readonly AdoDataLayer _adoDataLayer;
 
-        [HttpGet("GetCollegeDetails")]
-        public IActionResult getCollegeDetails()
+        public CollegeMasterController(AdoDataLayer adoDataLayer)
         {
-
-            List<CollegeMaster> college = new List<CollegeMaster>();
-            SqlDataReader reader = AdoDataLayer.GetReaderDataFromQuery("GetAllColleges");
-            {
-                while (reader.Read())
-                {
-
-                    college.Add(new CollegeMaster
-                    {
-                        CollegeID = reader.GetInt32(0),
-                        CollegeName = reader.GetString(1),
-                        AddressId=reader.GetInt32(2),
-                        Locality =reader.GetString(3),
-                        Area=reader.GetString(4),
-
-                    });
-                }
-
-            }
-            return Ok(college);
-
+            _adoDataLayer = adoDataLayer;
         }
-        #endregion
 
-
-        #region Save College Details
-        [HttpPost("SaveCollege")]
-        public IActionResult AddcollegeDetails([FromBody] CollegeMaster clg)
+        #region Get All College Details
+        [HttpGet("GetCollegeDetails")]
+        public IActionResult GetCollegeDetails()
         {
             try
             {
-                String StoredProcedure = "AddCollege";
-                SqlParameter[] parameter = new SqlParameter[]
+                List<CollegeMaster> colleges = new List<CollegeMaster>();
+
+                using (SqlDataReader reader = _adoDataLayer.ExecuteReader("GetAllColleges"))
+                {
+                    while (reader.Read())
+                    {
+                        colleges.Add(new CollegeMaster
+                        {
+                            CollegeID = reader.GetInt32(0),
+                            CollegeName = reader.GetString(1),
+                            AddressId = reader.GetInt32(2),
+                            Locality = reader.GetString(3),
+                            Area = reader.GetString(4)
+                        });
+                    }
+                }
+
+                return Ok(colleges);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal Server Error: {ex.Message}");
+            }
+        }
+        #endregion
+
+        #region Save College Details
+        [HttpPost("SaveCollege")]
+        public IActionResult AddCollegeDetails([FromBody] CollegeMaster clg)
+        {
+            try
+            {
+                string storedProcedure = "AddCollege";
+                SqlParameter[] parameters = new SqlParameter[]
                 {
                     new SqlParameter("@CollegeName", clg.CollegeName),
                     new SqlParameter("@AddressID", clg.AddressId)
-
                 };
-                AdoDataLayer.GetReaderDataFromQuery(StoredProcedure, parameter);
-                return Ok("Saved");
-            }
-            catch (Exception ex) { 
-               return BadRequest(ex.Message);
-            }
 
+                int rowsAffected = _adoDataLayer.ExecuteNonQuery(storedProcedure, parameters);
+
+                if (rowsAffected > 0)
+                    return Ok("College saved successfully.");
+                else
+                    return BadRequest("Failed to save college.");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal Server Error: {ex.Message}");
+            }
         }
-
         #endregion
 
         #region Update College Details
-        [HttpPut("UpdateDetails")]
-        public IActionResult UpdateDetails(int id,CollegeMaster clg)
+        [HttpPut("UpdateDetails/{id}")]
+        public IActionResult UpdateDetails(int id, [FromBody] CollegeMaster clg)
         {
             try
             {
                 string storedProcedure = "UpdateCollege";
-                SqlParameter[] parameter = new SqlParameter[]
-                {
-                    new SqlParameter("@CollegeID",id),
-                    new SqlParameter("@CollegeName",clg.CollegeName),
-                    new SqlParameter("@AddressID",clg.AddressId)
-
-                };
-                SqlDataReader reader = AdoDataLayer.GetReaderDataFromQuery(storedProcedure, parameter);
-                if (reader.RecordsAffected > 0)
-                {
-                    return Ok("Done with Update");
-                }
-                else
-                {
-                    return BadRequest("some thing went wrong");
-                }
-
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-        #endregion
-
-
-        #region Delete College Details
-        [HttpDelete("DeleteClgDetails/{id}")]
-        public IActionResult Delete(int id)
-        {
-            string storedProcedure = "DeleteCollege";
-            try
-            {
                 SqlParameter[] parameters = new SqlParameter[]
                 {
-                         new SqlParameter("@CollegeID", id)
+                    new SqlParameter("@CollegeID", id),
+                    new SqlParameter("@CollegeName", clg.CollegeName),
+                    new SqlParameter("@AddressID", clg.AddressId)
                 };
 
-                AdoDataLayer.GetReaderDataFromQuery(storedProcedure, parameters);
+                int rowsAffected = _adoDataLayer.ExecuteNonQuery(storedProcedure, parameters);
 
+                if (rowsAffected > 0)
+                    return Ok("College updated successfully.");
+                else
+                    return NotFound("College not found.");
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return StatusCode(500, $"Internal Server Error: {ex.Message}");
             }
-            return Ok("Deleted");
         }
-
         #endregion
 
+        #region Delete College Details
+        [HttpDelete("DeleteCollege/{id}")]
+        public IActionResult DeleteCollege(int id)
+        {
+            try
+            {
+                string storedProcedure = "DeleteCollege";
+                SqlParameter[] parameters = new SqlParameter[]
+                {
+                    new SqlParameter("@CollegeID", id)
+                };
+
+                int rowsAffected = _adoDataLayer.ExecuteNonQuery(storedProcedure, parameters);
+
+                if (rowsAffected > 0)
+                    return Ok("College deleted successfully.");
+                else
+                    return NotFound("College not found.");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal Server Error: {ex.Message}");
+            }
+        }
+        #endregion
     }
 }

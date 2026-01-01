@@ -1,86 +1,82 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
+using Microsoft.Identity.Client;
 using StudentBloodBank.ADOLayer;
 using StudentBloodBank.Model;
+using System;
 using System.Collections.Generic;
 
 namespace StudentBloodBank.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AddressMasterController : ControllerBase
+    public class AddressMasterController(AdoDataLayer _adoDataLayer) : ControllerBase
     {
+        
+
         #region Get All Address Details
         [HttpGet("GetAddressDetails")]
         public ActionResult<List<AddressMasterl>> Get()
         {
-            List<AddressMasterl> addresses = new List<AddressMasterl>();
-
-            SqlDataReader reader = AdoDataLayer.GetReaderDataFromQuery("GetAllAddress");
+            try
             {
-                while (reader.Read())
+                List<AddressMasterl> addresses = new List<AddressMasterl>();
+
+                using (SqlDataReader reader = _adoDataLayer.ExecuteReader("GetAllAddress"))
                 {
-                    addresses.Add(new AddressMasterl
+                    while (reader.Read())
                     {
-                        AddressId = reader.GetInt32(0),
-                        Locality = reader.GetString(1),
-                        Area = reader.GetString(2),
-                    });
+                        addresses.Add(new AddressMasterl
+                        {
+                            AddressId = reader.GetInt32(0),
+                            Locality = reader.GetString(1),
+                            Area = reader.GetString(2),
+                        });
+                    }
                 }
+                return Ok(addresses);
             }
-            return Ok(addresses);
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal Server Error: {ex.Message}");
+            }
         }
         #endregion
 
         #region Save Address Details
-
         [HttpPost("PostDetails")]
         public IActionResult PostDetails([FromBody] AddressMasterl address)
         {
             try
             {
-                string storedProcedureName = "AddAddress";
-
+                string storedProcedure = "AddAddress";
                 SqlParameter[] parameters = new SqlParameter[]
                 {
-                      new SqlParameter("@Locality", address.Locality),
-                      new SqlParameter("@Area", address.Area)
+                    new SqlParameter("@Locality", address.Locality),
+                    new SqlParameter("@Area", address.Area)
                 };
-
-                SqlDataReader reader = AdoDataLayer.GetReaderDataFromQuery(storedProcedureName, parameters);
-                {
-                    if (reader.HasRows)
-                    {
-                        AddressMasterl insertedAddress = new AddressMasterl();
-
-                        while (reader.Read())
-                        {
-                            insertedAddress.Locality = reader["Locality"].ToString();
-                            insertedAddress.Area = reader["Area"].ToString();
-                        }
-
-                        return Ok(insertedAddress);
-                    }
-                    else
-                    {
-                        return Ok("Ok done");
-                    }
-                }
+                int rowsAffected = _adoDataLayer.ExecuteNonQuery(storedProcedure, parameters);
+                if (rowsAffected > 0)
+                    return Ok("Address added successfully");
+                else
+                    return NotFound("Address not added.");
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
         }
+
+
         #endregion
 
-        #region Upadte Details
+        #region Update Address Details
         [HttpPut("PutDetails/{id}")]
         public IActionResult PutDetails(int id, [FromBody] AddressMasterl address)
         {
             try
             {
-                string storedProcedureName = "UpdateAddress";
+                string storedProcedure = "UpdateAddress";
                 SqlParameter[] parameters = new SqlParameter[]
                 {
                     new SqlParameter("@AddressID", id),
@@ -88,17 +84,12 @@ namespace StudentBloodBank.Controllers
                     new SqlParameter("@Area", address.Area)
                 };
 
-                SqlDataReader reader = AdoDataLayer.GetReaderDataFromQuery(storedProcedureName, parameters);
-                {
-                    if (reader.RecordsAffected > 0)
-                    {
-                        return Ok("Address updated successfully.");
-                    }
-                    else
-                    {
-                        return NotFound("Address not found.");
-                    }
-                }
+                int rowsAffected = _adoDataLayer.ExecuteNonQuery(storedProcedure, parameters);
+
+                if (rowsAffected > 0)
+                    return Ok("Address updated successfully.");
+                else
+                    return NotFound("Address not found.");
             }
             catch (Exception ex)
             {
@@ -107,36 +98,31 @@ namespace StudentBloodBank.Controllers
         }
         #endregion
 
-        #region Delete Details
+        #region Delete Address Details
         [HttpDelete("DeleteDetails/{id}")]
         public IActionResult DeleteDetails(int id)
         {
             try
             {
-                string storedProcedureName = "DeleteAddress";
-
+                string storedProcedure = "DeleteAddress";
                 SqlParameter[] parameters = new SqlParameter[]
                 {
                     new SqlParameter("@AddressID", id)
                 };
 
-                SqlDataReader reader = AdoDataLayer.GetReaderDataFromQuery(storedProcedureName, parameters);
-                {
-                    if (reader.RecordsAffected > 0)
-                    {
-                        return Ok("Address deleted successfully.");
-                    }
-                    else
-                    {
-                        return NotFound("Address not found.");
-                    }
-                }
+                int rowsAffected = _adoDataLayer.ExecuteNonQuery(storedProcedure, parameters);
+
+                if (rowsAffected > 0)
+                    return Ok("Address deleted successfully.");
+                else
+                    return NotFound("Address not found.");
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
         }
-        #endregion
+        #endregion end region
     }
+
 }

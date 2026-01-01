@@ -1,49 +1,85 @@
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
+using StudentBloodBank.ADOLayer;
+using System.Text;
 
-namespace StudentBloodBank
-{
-    public class Program
+var builder = WebApplication.CreateBuilder(args);
+
+// ? Register AdoDataLayer as a service (Singleton)
+builder.Services.AddSingleton<AdoDataLayer>();
+
+// ? Load JWT settings
+var jwtSettings = builder.Configuration.GetSection("JwtSettings");
+var key = Encoding.ASCII.GetBytes(jwtSettings["Key"] ?? "DefaultSecretKey12345");
+
+// ? Add Authentication & Authorization
+builder.Services
+    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
     {
-        public static void Main(string[] args)
+        options.RequireHttpsMetadata = false;
+        options.SaveToken = true;
+        options.TokenValidationParameters = new TokenValidationParameters
         {
-            var builder = WebApplication.CreateBuilder(args);
-
-            builder.Services.AddCors(options =>
-            {
-                options.AddPolicy("AllowSpecificOrigins",
-                    policy =>
-                    {
-                        policy.WithOrigins("*") 
-                              .AllowAnyMethod()
-                              .AllowAnyHeader();
-                    });
-            });
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = jwtSettings["Issuer"],
+            ValidAudience = jwtSettings["Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(key)
+        };
+    });
 
 
 
-            builder.Services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-            builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
 
-            var app = builder.Build();
+builder.Services.AddAuthorization();
 
-            // Configure the HTTP request pipeline.
-            if (app.Environment.IsDevelopment())
-            {
-                app.UseSwagger();
-                app.UseSwaggerUI();
-            }
+// ? Configure CORS (Allow All)
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
+});
 
-            app.UseHttpsRedirection();
+// ? Add Controllers & Swagger
+builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.SwaggerDoc("v1", new OpenApiInfo { Title = "Student Blood Bank API", Version = "v1" });
+    options.SchemaGeneratorOptions.UseAllOfToExtendReferenceSchemas = false;
+});
 
-            app.UseAuthorization();
+// ? Build the app
+// REPLACE the bottom of Program.cs with this:
+var app = builder.Build();
 
-            app.UseCors("AllowSpecificOrigins");
-
-
-            app.MapControllers();
-
-            app.Run();
-        }
-    }
+if (app.Environment.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage();
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
+
+// 1. Core routing and static files
+app.UseHttpsRedirection();
+app.UseDefaultFiles();
+app.UseStaticFiles();
+app.UseRouting();
+
+// 2. Security and Policy (Order is critical here)
+app.UseCors("AllowAll");
+app.UseAuthentication();
+app.UseAuthorization();
+
+// 3. Map the endpoints
+app.MapControllers();
+
+app.Run();

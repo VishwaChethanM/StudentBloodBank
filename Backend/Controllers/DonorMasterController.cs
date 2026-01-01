@@ -1,12 +1,10 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using StudentBloodBank.ADOLayer;
 using StudentBloodBank.DTOLayer;
-using StudentBloodBank.Enums;
 using StudentBloodBank.Model;
-using System.Data;
-using System.Drawing;
+using System;
+using System.Collections.Generic;
 
 namespace StudentBloodBank.Controllers
 {
@@ -14,28 +12,35 @@ namespace StudentBloodBank.Controllers
     [ApiController]
     public class DonorMasterController : ControllerBase
     {
-        #region Save Donar Details
-        [HttpPost("SaveDoner")]
-        public IActionResult AddcollegeDetails([FromBody] DonorMaster donr)
+        private readonly AdoDataLayer _adoDataLayer;
+
+        public DonorMasterController(AdoDataLayer adoDataLayer)
+        {
+            _adoDataLayer = adoDataLayer;
+        }
+
+        #region Save Donor Details
+        [HttpPost("SaveDonor")]
+        public IActionResult SaveDonor([FromBody] DonorMaster donor)
         {
             try
             {
-                String StoredProcedure = "RegisterDonor";
-                SqlParameter[] parameter = new SqlParameter[]
+                string storedProcedure = "RegisterDonor";
+                SqlParameter[] parameters = new SqlParameter[]
                 {
-                    new SqlParameter("@userId", donr.UserId),
-                    new SqlParameter("@Age", donr.Age),
-                    new SqlParameter("@LastDonationDate", donr.LastDonationDate),
-                    new SqlParameter("@AvailabilityStatus", donr.AvailabilityStatus)
+                    new SqlParameter("@userId", donor.UserId),
+                    new SqlParameter("@Age", donor.Age),
+                    new SqlParameter("@LastDonationDate", donor.LastDonationDate ?? (object)DBNull.Value),
+                    new SqlParameter("@AvailabilityStatus", donor.AvailabilityStatus)
                 };
-                AdoDataLayer.GetReaderDataFromQuery(StoredProcedure, parameter);
-                return Ok("Saved");
+
+                _adoDataLayer.ExecuteNonQuery(storedProcedure, parameters);
+                return Ok("Donor saved successfully.");
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return StatusCode(500, $"Internal Server Error: {ex.Message}");
             }
-
         }
         #endregion
 
@@ -43,72 +48,78 @@ namespace StudentBloodBank.Controllers
         [HttpGet("GetAllDonors")]
         public IActionResult GetAllDonors()
         {
-            List<GetAllDonorsDetailsDto> donors = new List<GetAllDonorsDetailsDto>();
-            SqlDataReader reader = AdoDataLayer.GetReaderDataFromQuery("GetAllDonors");
-
-            while (reader.Read())
+            try
             {
-                donors.Add(new GetAllDonorsDetailsDto
+                List<GetAllDonorsDetailsDto> donors = new List<GetAllDonorsDetailsDto>();
+
+                using (SqlDataReader reader = _adoDataLayer.ExecuteReader("GetAllDonors"))
                 {
-                    DonorId = reader.GetInt32(0),
-                    UserId = reader.GetInt32(1),
-                    Age = reader.GetInt32(2),
-                    LastDonationDate =reader.GetDateTime(3),
-                    AvailabilityStatus = Convert.ToBoolean(reader.GetValue(4)),
-                    CreatedDate = reader.GetDateTime(5),
-                });
+                    while (reader.Read())
+                    {
+                        donors.Add(new GetAllDonorsDetailsDto
+                        {
+                            DonorId = reader.GetInt32(0),
+                            UserId = reader.GetInt32(1),
+                            Age = reader.GetInt32(2),
+                            LastDonationDate = reader.GetDateTime(3),
+                            AvailabilityStatus = reader.GetBoolean(4),
+                            CreatedDate = reader.GetDateTime(5),
+                        });
+                    }
+                }
+
+                return Ok(donors);
             }
-            reader.Close(); 
-            return Ok(donors); 
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal Server Error: {ex.Message}");
+            }
         }
         #endregion
 
-
-        #region Get Donor By Id
+        #region Get Donor By ID
         [HttpGet("GetDonorById/{id}")]
-        public IActionResult GetUserById(int id)
+        public IActionResult GetDonorById(int id)
         {
             try
             {
-                List<DonorMaster> donors = new List<DonorMaster>();
                 SqlParameter[] parameters = new SqlParameter[]
                 {
                     new SqlParameter("@DonorId", id)
                 };
+                List<DonorMaster> donor = new List<DonorMaster>();
 
-                using (SqlDataReader reader = AdoDataLayer.GetReaderDataFromQuery("GetDonorById", parameters))
+                using (SqlDataReader reader = _adoDataLayer.ExecuteReader("GetDonorById", parameters))
                 {
                     while (reader.Read())
                     {
-                        donors.Add(new DonorMaster
+                        donor.Add(new DonorMaster
                         {
-                            DonorId = (int)reader["DonorId"],
-                            Age = (int)reader["Age"],
-                            LastDonationDate = reader["LastDonationDate"] == DBNull.Value ? (DateTime?)null : (DateTime)reader["LastDonationDate"],
-
+                            DonorId = reader.GetInt32(0),
+                            Email = reader.GetString(1),
+                            BloodGroup = reader.GetString(2),
+                            Age = reader.GetInt32(3),
+                            LastDonationDate = reader.IsDBNull(4) ? (DateTime?)null : reader.GetDateTime(4),
+                            AvailabilityStatus = reader.GetBoolean(5),
+                            Contact = reader.GetString(6),
+                            CollegeId = reader.GetInt32(7),
                         });
                     }
                 }
-                if (donors.Count > 0)
-                {
-                    Ok(donors[0]);
-                }
-                else
-                {
-                    NotFound("User not found.");
 
-                }
-                return Ok(donors);
+                if (donor.Count == 0)
+                    return NotFound("Donor not found.");
 
+                return Ok(donor);
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return StatusCode(500, $"Internal Server Error: {ex.Message}");
             }
         }
         #endregion
 
-        #region Search Donors By BloodGroup
+        #region Search Donors By Blood Group
         [HttpGet("SearchDonorsByBloodGroup/{bloodGroup}")]
         public IActionResult SearchDonorsByBloodGroup(string bloodGroup)
         {
@@ -117,71 +128,62 @@ namespace StudentBloodBank.Controllers
                 List<DonorMaster> donors = new List<DonorMaster>();
                 SqlParameter[] parameters = new SqlParameter[]
                 {
-                       new SqlParameter("@BloodGroup", bloodGroup)
+                    new SqlParameter("@BloodGroup", bloodGroup)
                 };
 
-                using (SqlDataReader reader = AdoDataLayer.GetReaderDataFromQuery("SearchDonorsByBloodGroup", parameters))
+                using (SqlDataReader reader = _adoDataLayer.ExecuteReader("SearchDonorsByBloodGroup", parameters))
                 {
                     while (reader.Read())
                     {
                         donors.Add(new DonorMaster
                         {
                             DonorId = reader.GetInt32(0),
-                            BloodGroup = reader.GetString(3),
-                            Age = reader.GetInt32(4),
-                            LastDonationDate = reader.IsDBNull(5) ? (DateTime?)null : reader.GetDateTime(5),
-                            AvailabilityStatus = reader.GetBoolean(6),
-                            Contact=reader.GetString(7),
-                            CollegeId = reader.GetInt32(8),
+                            BloodGroup = reader.GetString(1),
+                            Age = reader.GetInt32(2),
+                            LastDonationDate = reader.IsDBNull(3) ? (DateTime?)null : reader.GetDateTime(3),
+                            AvailabilityStatus = reader.GetBoolean(4),
+                            Contact = reader.GetString(5),
+                            CollegeId = reader.GetInt32(6),
                         });
                     }
                 }
-                if(donors.Count > 0)
-                {
-                    return Ok(donors);
-                }
-                else
-                {
-                    NotFound("No donors found for the given blood group.");
-                }
-                return Ok("Done");
-
+                if (donors.Count == 0)
+                    return NotFound("No donors found for the given blood group.");
+                return Ok(donors);
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return StatusCode(500, $"Internal Server Error: {ex.Message}");
             }
         }
         #endregion
 
-        #region Update Donor
+
+        #region Update Donor Availability
         [HttpPut("UpdateAvailability/{donorId}")]
         public IActionResult UpdateAvailability(int donorId, [FromBody] bool availabilityStatus)
         {
             try
             {
-                string storedProcedureName = "UpdateAvailabilityStatus";
-
+                string storedProcedure = "UpdateAvailabilityStatus";
                 SqlParameter[] parameters = new SqlParameter[]
                 {
-                     new SqlParameter("@DonorId", donorId),
-                     new SqlParameter("@AvailabilityStatus", availabilityStatus)
+                    new SqlParameter("@DonorId", donorId),
+                    new SqlParameter("@AvailabilityStatus", availabilityStatus)
                 };
 
-               SqlDataReader reader=  AdoDataLayer.GetReaderDataFromQuery(storedProcedureName, parameters);
-               
-               return Ok("Updated");
-              
-               
+                int rowsAffected = _adoDataLayer.ExecuteNonQuery(storedProcedure, parameters);
+
+                if (rowsAffected == 0)
+                    return NotFound("No donor found with the given ID.");
+
+                return Ok("Donor availability updated successfully.");
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return StatusCode(500, $"Internal Server Error: {ex.Message}");
             }
         }
         #endregion
-
-
-
     }
 }

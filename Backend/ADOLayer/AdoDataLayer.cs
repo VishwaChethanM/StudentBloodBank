@@ -1,53 +1,74 @@
 ﻿using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.Configuration;
+using System;
 using System.Data;
 
 namespace StudentBloodBank.ADOLayer
 {
     public class AdoDataLayer
     {
-        private static string SqlConnectionString = "Data Source=DESKTOP-T918QFB\\SQLEXPRESS02;Initial Catalog=StudentBloodBank;Integrated Security=True;TrustServerCertificate=True";
-        public static SqlDataReader GetReaderDataFromQuery(string storedProcedureName, SqlParameter[] parameters = null)
+        private readonly string _connectionString;
+
+        // Constructor to initialize connection string from appsettings.json
+        public AdoDataLayer(IConfiguration configuration)
         {
-            SqlConnection sqlConnection = new SqlConnection();
-            SqlCommand sqlCommand = new SqlCommand();
+            _connectionString = configuration.GetConnectionString("DefaultConnection")
+                                ?? throw new ArgumentNullException(nameof(configuration), "Connection string is missing.");
+        }
 
-            sqlConnection.ConnectionString = SqlConnectionString;
-            sqlConnection.Open();
-
-            sqlCommand.Connection = sqlConnection;
-            sqlCommand.CommandText = storedProcedureName;
-            sqlCommand.CommandType = CommandType.StoredProcedure;
-
-            if (parameters != null)
+        // Fetch Data Using Stored Procedure
+        public SqlDataReader ExecuteReader(string storedProcedureName, SqlParameter[] parameters = null)
+        {
+            try
             {
-                sqlCommand.Parameters.AddRange(parameters);
+                var sqlConnection = new SqlConnection(_connectionString);
+                var sqlCommand = new SqlCommand(storedProcedureName, sqlConnection)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+                if (parameters != null)
+                {
+                    sqlCommand.Parameters.AddRange(parameters);
+                }
+                sqlConnection.Open();
+                return sqlCommand.ExecuteReader(CommandBehavior.CloseConnection);
             }
-
-            SqlDataReader sqlDataReader = sqlCommand.ExecuteReader(CommandBehavior.CloseConnection);
-            return sqlDataReader;
+            catch (Exception ex)
+            {
+                // Log the error (consider using a logging framework like Serilog)
+                Console.WriteLine($"[Error] ExecuteReader: {ex.Message}");
+                throw;
+            }
         }
 
 
-
-        public static int SaveInformation(string query, SqlParameter[] parameters = null)
+        // Execute Insert, Update, Delete Queries
+        public int ExecuteNonQuery(string storedProcedure, SqlParameter[] parameters = null)
         {
-            SqlConnection sqlConnection = new SqlConnection();
-            SqlCommand sqlCommand = new SqlCommand();
-
-            sqlConnection.ConnectionString = SqlConnectionString;
-            sqlConnection.Open();
-
-            sqlCommand.Connection = sqlConnection;
-            sqlCommand.CommandText = query;
-            sqlCommand.CommandType = CommandType.Text;
-
-            if (parameters != null)
+            try
             {
-                sqlCommand.Parameters.AddRange(parameters);
-            }
+                using (var sqlConnection = new SqlConnection(_connectionString))
+                {
+                    sqlConnection.Open();
+                    using (var sqlCommand = new SqlCommand(storedProcedure, sqlConnection))
+                    {
+                        sqlCommand.CommandType = CommandType.StoredProcedure;
 
-            int count = sqlCommand.ExecuteNonQuery();
-            return count;
+                        if (parameters != null)
+                        {
+                            sqlCommand.Parameters.AddRange(parameters);
+                        }
+
+                        return sqlCommand.ExecuteNonQuery();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[Error] ExecuteNonQuery: {ex.Message}");
+                throw;
+            }
         }
+
     }
 }
